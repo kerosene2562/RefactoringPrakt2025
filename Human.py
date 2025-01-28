@@ -12,7 +12,7 @@ class Human:
         print(f"name: {self.name}, age: {self.age}, money: {self.__money}, house: {self.__house} m^2")
         
     @staticmethod
-    def default_info():\
+    def default_info():
         print(f"name: {Human.default_name}, age: {Human.default_age}")
 
     def __make_deal(self, house):
