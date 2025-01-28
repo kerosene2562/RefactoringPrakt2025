@@ -133,33 +133,54 @@ class KmrWork(KmrCsv, Statistic, Plots):
 
     def compare_csv(self):
         compareArr = []
+
         for num, kmr in self.kmrs.items():
-            test = []
-            tmp = KmrCsv(kmr, num)
-            data = tmp.readResults()
-            test.append(len(data))
-
-            dictStat = Statistic.marks_stat(data)
-            zagBal = 0
-            for bal, kilk in dictStat.items():
-                bal = float(bal.replace(',','.'))
-                zagBal += (bal * kilk)
-            test.append(zagBal / len(data))
-
-            zagTime = 0
-            for row in data:
-                time = re.match(r"(\d+)\s*хв(?:\s*(\d+)\s*сек)?", row[3])
-                if time:
-                    minutes = int(time[1])
-                    seconds = int(time[2]) if time[2] else 0
-                    zagTime +=  minutes * 60 + seconds
-            test.append(zagTime / 60 / len(data))
+            test = self.process_single_test(kmr, num)
             compareArr.append(test)
+
+        self.save_results(compareArr)
+
+    def process_single_test(self, kmr, num):
+        tmp = KmrCsv(kmr, num)
+        data = tmp.readResults()
+
+        test = []
+        test.append(len(data))
+        test.append(self.calculate_average_score(data))
+        test.append(self.calculate_average_time(data))
+
+        return test
+
+    def calculate_average_score(self, data):
+        dictStat = Statistic.marks_stat(data)
+        total_score = 0
+
+        for bal, count in dictStat.items():
+            bal = float(bal.replace(',', '.'))
+            total_score += bal * count
+
+        return total_score / len(data)
+
+    def calculate_average_time(self, data):
+        total_time = 0
+
+        for row in data:
+            time_match = re.match(r"(\d+)\s*хв(?:\s*(\d+)\s*сек)?", row[3])
+            if time_match:
+                minutes = int(time_match[1])
+                seconds = int(time_match[2]) if time_match[2] else 0
+                total_time += minutes * 60 + seconds
+
+        return total_time / 60 / len(data)
+
+    def save_results(self, compareArr):
+        if not os.path.isdir(self.cat):
+            os.mkdir(self.cat)
+
         with open(f"{self.cat}/scv_compare.txt", 'w', encoding="utf-8") as file:
-            if not os.path.isdir(self.cat):
-                os.mkdir(self.cat)
             for index, test in enumerate(compareArr):
-                file.write(f"кількість проходжень тесту номер {index+1}: {test[0]}, середній бал: {test[1]}, середній час проходження тесту: {test[2]}\n")
+                file.write(
+                    f"Кількість проходжень тесту номер {index + 1}: {test[0]}, середній бал: {test[1]}, середній час проходження тесту: {test[2]}\n")
 
     def compare_avg_plots(self, bals):
         width = 0.3
@@ -177,4 +198,3 @@ class KmrWork(KmrCsv, Statistic, Plots):
             os.mkdir(self.cat)
         plt.savefig('results/cmpGist.png')
         plt.show()
-
