@@ -95,7 +95,9 @@ while(True):
                 print(f"студент з айді {id} отримав {balPerMin:.2f} білів за хвилину")
 
             print("топ 5 оцінок з заданими межами")
-            for id, bal, balPM in Statistic.best_marks_per_time(results1,0, 0.4):
+            bottom_value = 0
+            top_value = 0.4
+            for id, bal, balPM in Statistic.best_marks_per_time(results1,bottom_value, top_value):
                 print(f"студент з айді {id} та загальним балом {bal} має {balPM} балів за одну хвилину")
 
             plt = Plots()
@@ -103,7 +105,7 @@ while(True):
 
             plt.marks_plot(dictBals)
 
-            plt.best_marks_plot(Statistic.best_marks_per_time(results1,0, 0.4))
+            plt.best_marks_plot(Statistic.best_marks_per_time(results1,bottom_value, top_value))
 
             Kmr1 = KmrWork("marks.lab6.csv", 1)
             Kmr2 = KmrWork("marks2.lab11.csv", 2)

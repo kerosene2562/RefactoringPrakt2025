@@ -77,8 +77,10 @@ class Statistic:
     def best_marks_per_time(data, bottom_margin, top_margin):
         resultArr = []
         bestFive = []
+        searchCol = 4
+        max_students = 5
 
-        avgBals = [float(data[i][4].replace(',','.')) for i in range(len(data))]
+        avgBals = [float(data[i][searchCol].replace(',','.')) for i in range(len(data))]
         for index, (student, markPerTime) in enumerate(Statistic.marks_per_time(data).items()):
             resultArr.append([student, avgBals[index], markPerTime])
 
@@ -87,7 +89,7 @@ class Statistic:
         for index,(id, bal, balPM) in enumerate(resultArr):
             if balPM > bottom_margin and balPM < top_margin:
                 bestFive.append(resultArr[index])
-            if len(bestFive) == 5:
+            if len(bestFive) == max_students:
                 break
 
         return bestFive
