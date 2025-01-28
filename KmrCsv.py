@@ -49,8 +49,12 @@ class Statistic:
 
     @staticmethod
     def marks_stat(data):
+        return Statistic._calculate_stat(data, index=4)
+
+    @staticmethod
+    def _calculate_stat(data, index):
         resultDict = {}
-        bals = [data[i][4] for i in range(len(data))]
+        bals = [data[i][index] for i in range(len(data))]
         for bal in bals:
             if bal in resultDict:
                 resultDict[bal] += 1
