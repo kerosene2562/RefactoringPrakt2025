@@ -13,6 +13,14 @@ MARKS_PLOT_FILE = 'marks_plot.png'
 BEST_MARKS_PLOT_FILE = 'best_marks_plot.png'
 CMP_GIST_FILE = 'results/cmpGist.png'
 
+# Допоміжна функція для парсингу часу
+def parse_time(time_str):
+    time_match = re.match(r"(\d+)\s*хв(?:\s*(\d+)\s*сек)?", time_str)
+    if time_match:
+        minutes = int(time_match[1])
+        seconds = int(time_match[2]) if time_match[2] else 0
+        return minutes, seconds
+    return 0, 0
 
 class KmrCsv:
     def __init__(self, ref=DEFAULT_CSV_FILE, num=1):
@@ -77,11 +85,8 @@ class Statistic:
     def marks_per_time(data):
         resultDict = {}
         for row in data:
-            time = re.match(r"(\d+)\s*хв(?:\s*(\d+)\s*сек)?", row[3])
-            if time:
-                minutes = int(time[1])
-                seconds = int(time[2]) if time[2] else 0
-                resultDict[row[0]] = float(row[4].replace(',', '.')) / (minutes * 60 + seconds) * 60
+            minutes, seconds = parse_time(row[3])
+            resultDict[row[0]] = float(row[4].replace(',', '.')) / (minutes * 60 + seconds) * 60
         return resultDict
 
     @staticmethod
@@ -185,11 +190,8 @@ class KmrWork(KmrCsv, Statistic, Plots):
         total_time = 0
 
         for row in data:
-            time_match = re.match(r"(\d+)\s*хв(?:\s*(\d+)\s*сек)?", row[3])
-            if time_match:
-                minutes = int(time_match[1])
-                seconds = int(time_match[2]) if time_match[2] else 0
-                total_time += minutes * 60 + seconds
+            minutes, seconds = parse_time(row[3])
+            total_time += minutes * 60 + seconds
 
         return total_time / 60 / len(data)
 
