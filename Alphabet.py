@@ -1,47 +1,36 @@
-class Alphabet:
-    __punkt = " ,.-\\/|*`\"\';:1234567890"
+UA_LETTERS = "абвгдежзиіїйклмнопрстуфхцчшщьюя"
+EN_LETTERS = "abcdefghijklmnopqrstuvwxyz"
+PUNCTUATION = " ,.-\\/|*`\"';:1234567890"
 
-    def __init__(self, lang = "ua", letters = "абвгдежзиіїйклмнопрстуфхцчшщьюя"):
+class Alphabet:
+    def __init__(self, lang="ua", letters=UA_LETTERS):
         self.lang = lang
         self.letters = letters
 
     def print_alphabet(self):
-        print("літери: ",self.letters)
+        print("літери:", self.letters)
 
     def letters_num(self):
-        print("довжина літер: ", len(self.letters))
+        print("довжина літер:", len(self.letters))
 
-    def is_ua_lang(self, string):
-        print(f"перевірка чи всі символи українські в стрічці: {string}")
+    def is_valid_string(self, string):
+        print(f"Перевірка чи всі символи відповідають алфавіту ({self.lang}): {string}")
         for i in string:
-            if i.lower() not in self.letters and i.lower() not in self.__punkt:
-                print("є не українські символи!")
+            if i.lower() not in self.letters and i.lower() not in PUNCTUATION:
+                print("Є недопустимі символи!")
                 return False
-        print("всі символи українські")
+        print("Всі символи валідні")
         return True
-            
-
-    @classmethod
-    def getPunkt(cls):
-        return cls.__punkt
 
 class EngAlphabet(Alphabet):
-    __en_letters_num = 26
-
-    def __init__(self, lang = "en", letters = "abcdefghijklmnopqrsntuvwxyz"):
-        super().__init__(lang, letters)
+    def __init__(self):
+        super().__init__(lang="en", letters=EN_LETTERS)
 
     def is_en_letter(self, string):
-        print(f"перевірка чи всі символи англійські в стрічці: {string}")
-        for i in string:
-            if i.lower() not in self.letters and i.lower() not in super().getPunkt():
-                print("є не англійські символи!")
-                return False
-        print("всі символи англійські")
-        return True
+        return self.is_valid_string(string)
 
     def letters_num(self):
-        return f"кількість літер: {self.__en_letters_num}"
+        return f"Кількість літер: {len(self.letters)}"
     
     @staticmethod
     def example():
