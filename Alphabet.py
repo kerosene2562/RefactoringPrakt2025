@@ -35,7 +35,7 @@ class EngAlphabet(Alphabet):
         return self.is_valid_string(string)
 
     def letters_num(self):
-        return f"кількість літер: {self.__en_letters_num}"
+        return f"Number of letters: {len(self.letters)}"
     
     @staticmethod
     def example():
