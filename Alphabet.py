@@ -11,13 +11,13 @@ class Alphabet:
     def letters_num(self):
         print("довжина літер: ", len(self.letters))
 
-    def is_ua_lang(self, string):
-        print(f"перевірка чи всі символи українські в стрічці: {string}")
+    def is_valid_string(self, string):
+        print(f"Перевірка чи всі символи відповідають алфавіту ({self.lang}): {string}")
         for i in string:
-            if i.lower() not in self.letters and i.lower() not in self.__punkt:
-                print("є не українські символи!")
+            if i.lower() not in self.letters and i.lower() not in PUNCTUATION:
+                print("Є недопустимі символи!")
                 return False
-        print("всі символи українські")
+        print("Всі символи валідні")
         return True
             
 
@@ -32,13 +32,7 @@ class EngAlphabet(Alphabet):
         super().__init__(lang, letters)
 
     def is_en_letter(self, string):
-        print(f"перевірка чи всі символи англійські в стрічці: {string}")
-        for i in string:
-            if i.lower() not in self.letters and i.lower() not in super().getPunkt():
-                print("є не англійські символи!")
-                return False
-        print("всі символи англійські")
-        return True
+        return self.is_valid_string(string)
 
     def letters_num(self):
         return f"кількість літер: {self.__en_letters_num}"
